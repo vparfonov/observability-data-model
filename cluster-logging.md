@@ -30,9 +30,10 @@ The "Applicable Sources" column shows which log sources this field applies to:
 
 * `all` is a field that is present on all logs
 * `container` is a field that is present on Kubernetes Container logs (both application and infrastructure)
-* `audit` is a field that is present on Kubernetes and OpenShift API and OVN Logs
+* `audit` is a field that is present on Kubernetes and OpenShift API
 * `auditd` is a field that is present on Node auditd logs
 * `journal` is a field that is present on Node journal logs
+* `ovn log` is field that is present on OVN Logs
 
 | Name |  Applicable Sources | Comment |
 | :--- | :------------------ | :------ |
@@ -104,10 +105,24 @@ The "Storage" column shows whether the attribute is stored into a LokiStack usin
 | `service.name` | resource | journal | stream label | |
 | `systemd.t.*` | log | journal | structured metadata | |
 | `systemd.u.*` | log | journal | structured metadata | |
+| `k8s.ovn.component` | resource | OVN logs | stream label | The OVN component generating the log|
+| `k8s.ovn.sequence` | log | OVN logs | structured metadata | The sequence number indicating the log entry's order|
+| `k8s.ovn.message` | log | OVN logs | structured metadata | The main content of the log entry, can containing key-value pairs|
+| `k8s.ovn.message.*` | log | OVN logs | structured metadata | Individual key-value pairs parsed from the `ovn.message` field|
+| `k8s.auditd.event.type` | log | auditd logs | structured metadata | The type of auditd event (e.g., `SYSCALL`, `PROCTITLE`) |
+| `k8s.auditd.event.*`| log | auditd logs | structured metadata | The audit event fields |
+
+
 
 **Note:** Attributes marked as "Compatibility attribute" are added to support minimal backwards compatibility with the [ViaQ](https://github.com/openshift/cluster-logging-operator/blob/release-6.0/docs/reference/datamodels/viaq/v1.adoc) data model. These attributes should be considered deprecated and will be removed one release after **General Acceptance** of Red Hat OpenShift Logging.
 
 **Note:** Loki changes the attribute names when persisting them to storage. They will be lower-cased and all characters in the set: (`.`,`/`,`-`) will be replaced by underscores (`_`). For example, `k8s.namespace.name` will become `k8s_namespace_name`.
+
+**Note:** 
+
+[Audit Record Types](https://access.redhat.com/articles/4409591#audit-record-types-2) 
+
+[Audit Event Fields](https://access.redhat.com/articles/4409591#audit-event-fields-1)
 
 ## References
 

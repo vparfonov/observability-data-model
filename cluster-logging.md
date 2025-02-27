@@ -107,22 +107,19 @@ The "Storage" column shows whether the attribute is stored into a LokiStack usin
 | `systemd.u.*` | log | journal | structured metadata | |
 | `k8s.ovn.component` | resource | OVN logs | stream label | The OVN component generating the log|
 | `k8s.ovn.sequence` | log | OVN logs | structured metadata | The sequence number indicating the log entry's order|
-| `k8s.ovn.message` | log | OVN logs | structured metadata | The main content of the log entry, can containing key-value pairs|
-| `k8s.ovn.message.*` | log | OVN logs | structured metadata | Individual key-value pairs parsed from the `ovn.message` field|
-| `k8s.auditd.event.type` | log | auditd logs | structured metadata | The type of auditd event (e.g., `SYSCALL`, `PROCTITLE`) |
-| `k8s.auditd.event.*`| log | auditd logs | structured metadata | The audit event fields |
-
+| `auditd.type` | log | auditd logs | structured metadata | The type of auditd event (e.g., `SYSCALL`, `PROCTITLE`) |
+| `auditd.sequence` | log | auditd logs | structured metadata | The sequence number indicating the log entry's order will taken from msg: msg=audit(<epoch time>:<sequence number>|
 
 
 **Note:** Attributes marked as "Compatibility attribute" are added to support minimal backwards compatibility with the [ViaQ](https://github.com/openshift/cluster-logging-operator/blob/release-6.0/docs/reference/datamodels/viaq/v1.adoc) data model. These attributes should be considered deprecated and will be removed one release after **General Acceptance** of Red Hat OpenShift Logging.
 
 **Note:** Loki changes the attribute names when persisting them to storage. They will be lower-cased and all characters in the set: (`.`,`/`,`-`) will be replaced by underscores (`_`). For example, `k8s.namespace.name` will become `k8s_namespace_name`.
 
-**Note:** 
+**Note:** Auditd log event mandatory parts are `type` and `msg`, with following key-value pair fileds (e.g. `type=USER_LOGIN msg=audit(1582710609.181:104544): user=root exe="/usr/bin/sshd" hostname=192.168.1.1 res=success`)
+Event Type (type=) is kind of action was audited (e.g., USER_CMD, SYSCALL, LOGIN). [Audit Record Types](https://access.redhat.com/articles/4409591#audit-record-types-2) 
+Message (msg=) contains the audit timestamp and event sequence number: msg=audit(<epoch time>:<sequence number>)
+Commonly used fields: pid, uid, comm, exe. [Audit Event Fields](https://access.redhat.com/articles/4409591#audit-event-fields-1)
 
-[Audit Record Types](https://access.redhat.com/articles/4409591#audit-record-types-2) 
-
-[Audit Event Fields](https://access.redhat.com/articles/4409591#audit-event-fields-1)
 
 ## References
 
